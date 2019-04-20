@@ -1,0 +1,28 @@
+https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-addressform
+
+
+https://www.youtube.com/watch?v=Zxf1mnP5zcw  got to 21:45
+
+
+
+
+Google API KEY = AIzaSyA2Z73bHqtsEJuas82kslWAoAegg5Rxrco
+
+Barley Co -- 32.8419369,-96.7706972
+
+-----------     Yelp Info
+Client ID
+qE6B5DgXmuWJ0iofKpk_Rg
+
+JARq9NBksYNIfR1HQQ8z3P5r7ypZW9-Xo_bVQUO-QRgXM3XJbnpvhKuo25EXjDrm1Xq8A9Vv6-p9dHcRJlH6dVqQVbXLU_iq3CYqI1YVwxyD12qLi0-xDNo8_ba5XHYx
+
+
+This is an app that uses the Google API and Yelp to find happy hours nearby.  This is a class project
+
+This is an app that uses the Google API and Yelp to find happy hours nearby.  This is a class project
+
+Find Your Buzz
+
+
+Helpful link for adding an array to GOOGLE API
+https://stackoverflow.com/questions/15531390/adding-array-of-markers-in-google-map
