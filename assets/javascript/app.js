@@ -1,6 +1,6 @@
 $(document).ready(function(barFinder){
 
- 
+ // I am in megan.
 
   // Initialize Firebase
   var config = {
