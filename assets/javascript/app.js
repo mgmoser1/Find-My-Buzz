@@ -1,6 +1,6 @@
 $(document).ready(function(barFinder){
 
- 
+
 
   // Initialize Firebase
   var config = {
@@ -13,7 +13,5 @@ $(document).ready(function(barFinder){
     };
     firebase.initializeApp(config);
         
-    // Create a variable to reference the database.
-    var database = firebase.database();
-
+    
 });
