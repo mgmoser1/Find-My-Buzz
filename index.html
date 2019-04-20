@@ -15,42 +15,64 @@
 
 <body>
   <h1>Find My Buzz</h1>
+  <div class="user-form ">
+    <div class="container user-input p-4">
+      <form>
+        <div class="form-group">
+          <medium id="instructions" class="form-text text-muted">Please select your zip code and the number of bars to
+            return</medium>
+          <label for="zip">Zip Code</label>
+          <input type="number" class="form-control" id="zip" placeholder="Zip Code">
+          <div class="form-group">
+            <label for="search-limit">Number of Bars</label>
+            <select class="form-control" id="search-limit">
+              <option>2</option>
+              <option>5</option>
+              <option>10</option>
+              <option>15</option>
+              <option>20</option>
+            </select>
+          </div>
+          <button type="submit-search" class="btn btn-primary submit-search" id="submit-search">Submit</button>
+      </form>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row mt-5">
+      <!-- Google Map Loads here -->
+      <div class="col-9">
+        <div id="map"></div>
+      </div>
 
-  <div class="row mt-5">
-    <!-- Google Map Loads here -->
-    <div class="col-8">
-      <div id="map"></div>
+      <!-- Use this for dynamic buttons -->
+      <div class="col-3">
+        <div class="barDiv">
+        </div>
+      </div>
+
     </div>
 
-    <!-- Use this for dynamic buttons -->
-    <div class="col">
-      <div class="barDiv">
+    <div class="dynamic mt-5">
+
+      <h3>Data - powered by <i class="fab fa-yelp"></i></h3>
+      <div class="info">
+        <br>
+      </div>
+      <div class="image-here">
+
+      </div>
+      <div class="container p-4">
+        <div class="reviews">
+
+        </div>
       </div>
     </div>
 
-  </div>
 
-  <div class="dynamic mt-5">
-
-    <h3>Yelp Fusion Data - powered by <i class="fab fa-yelp"></i></h3>
-    <div class="info">
-      <br>
-    </div>
-    <div class="image-here">
-
-    </div>
-    <div class="container p-4">
-      <div class="reviews">
-
-      </div>
-    </div>
-  </div>
-
-
-  </div>
-  <div class="btn-div mt-5">
-    <button type="button" class="btn btn-primary">
-      <a href="location.html">Take me to layout ideas</a></button>
+    <!-- <div class="btn-div mt-5">
+      <button type="button" class="btn btn-primary">
+        <a href="location.html">Take me to layout ideas</a></button>
+    </div> -->
   </div>
 
   <script src="https://code.jquery.com/jquery-3.4.0.min.js"

@@ -4,14 +4,24 @@ body {
   height: 100vh;
 }
 
-/* 
-img {
-  width: 100%
-} */
+h1 {
+  font-size: 80px;
+  padding: 50px;
+}
+
+.user-input {
+  border: rgb(83, 161, 175) solid;
+}
+
+#instructions {
+  font-size: 30px;
+  color: white;
+}
+
 
 #map {
   height: 100%;
-  width: 60%;
+  width: 90%;
   padding: 50px;
   margin: auto;
 }
@@ -20,16 +30,8 @@ a {
   color: white;
 }
 
-#locationMap {
-  height: 25%;
-  width: 20%;
-  padding: 100px;
-  margin: auto;
-}
-
 h1,
 h3 {
-  /* padding: 50px; */
   text-align: center;
 }
 
@@ -41,7 +43,6 @@ h3 {
 .btn-light {
   width: 80%;
   margin: .5em 0;
-  padding: .2em;
 }
 
 .btn-primary {
