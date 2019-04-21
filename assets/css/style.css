@@ -5,7 +5,7 @@ body {
 }
 
 h1 {
-  font-size: 80px;
+  font-size: 70px;
   padding: 50px;
 }
 
@@ -53,4 +53,33 @@ h3 {
 
 #reset-search {
   visibility: hidden;
+}
+
+
+
+/* ! CSS for index2 with bar info */
+
+.bar-name {
+  text-align: center;
+  font-weight: 700;
+  color: blue;
+
+}
+
+img {
+  width: 31%;
+  margin: .5em;
+}
+
+.dynamic {
+  visibility: hidden;
+}
+
+.user-reviews {
+  font-style: italic;
+  font-size: 20px;
+  padding-bottom: 1em;
+  text-align: unset;
+  margin-right: 1em;
+  font
 }

@@ -1,3 +1,7 @@
+// ! going to use this to test various icons
+
+
+
 // ? This is for the GOOGLE Map API ??????
 function initMap() {
   var map = new google.maps.Map(document.getElementById('map'), {
@@ -135,8 +139,10 @@ $('#submit-search').on("click", function (event) {
             var cats = [data.businesses[i].categories[0].alias];
             catArray.push(cats);
             catArray = catArray;
+
             initMap();
           }
+          console.log(catArray);
         }
         barButton();
       }
