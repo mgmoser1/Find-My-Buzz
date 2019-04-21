@@ -20,6 +20,7 @@ function initMap() {
         infoPopUp.setContent(nameArray[i]);
         infoPopUp.open(map, marker);
       }
+
     })(marker, i));
   }
 }
