@@ -2,7 +2,8 @@
 var catArray = [];
 
 // ! Various icons for different Establishments
-var standardIcon = "https://img.icons8.com/windows/32/000000/coconut-cocktail.png"; //srestaurant
+var standardIcon =
+  "https://img.icons8.com/windows/32/000000/coconut-cocktail.png"; //srestaurant
 var beerIcon = "https://img.icons8.com/color/32/000000/beer.png";
 var wineIcon = "https://img.icons8.com/color/32/000000/wine-glass.png";
 var whiskeyIcon = "https://img.icons8.com/color/32/000000/sport.png";
@@ -10,15 +11,14 @@ var pubIcon = "https://img.icons8.com/dusk/32/000000/beer.png";
 var newAmericanIcon = "https://img.icons8.com/color/48/000000/usa.png";
 var cocktailIcon = "https://img.icons8.com/windows/32/000000/cocktail.png";
 
-
 // ? This is for the GOOGLE Map API ??????
 function initMap() {
-  var map = new google.maps.Map(document.getElementById('map'), {
+  var map = new google.maps.Map(document.getElementById("map"), {
     zoom: 12,
-    center: new google.maps.LatLng(latArray[0], lngArray[0]),
+    center: new google.maps.LatLng(latArray[0], lngArray[0])
   });
 
-  var infoPopUp = new google.maps.InfoWindow;
+  var infoPopUp = new google.maps.InfoWindow();
   var marker, i;
   // catArray = catArray;
 
@@ -33,13 +33,16 @@ function initMap() {
       map: map
     });
 
-    google.maps.event.addListener(marker, 'click', (function (marker, i) {
-      return function () {
-        infoPopUp.setContent(nameArray[i]);
-        infoPopUp.open(map, marker);
-      }
-
-    })(marker, i));
+    google.maps.event.addListener(
+      marker,
+      "click",
+      (function (marker, i) {
+        return function () {
+          infoPopUp.setContent(nameArray[i]);
+          infoPopUp.open(map, marker);
+        };
+      })(marker, i)
+    );
   }
 }
 
@@ -61,8 +64,6 @@ var lngArray = [];
 // ? will need this for local storage
 var idArray = [];
 
-
-
 // ? this works when set to null to start
 var userloc = null;
 
@@ -70,32 +71,45 @@ var searchLimit = 0;
 
 // ! This resets the prior search
 function reset() {
-  $('#map').css("visibility", "hidden");
-  $('.barDiv').empty();
-  $('#reset-search').css("visibility", "hidden");
+  $("#map").css("visibility", "hidden");
+  $(".barDiv").empty();
+  $("#reset-search").css("visibility", "hidden");
   nameArray = [];
   latArray = [];
   lngArray = [];
   catArray = [];
 
   // ! added
-  $('.dynamic').css("visibility", "hidden");
+  $(".dynamic").css("visibility", "hidden");
 }
 // ! on click funtion for reset
-$('#reset-search').on("click", function () {
+$("#reset-search").on("click", function () {
   reset();
-})
+});
+
+// ! function for validation
+var zipValue = $("#zip-input").val
+var regEx = /\b\d{5}\b/g;
+
+function zipValidation() {
+  if (regEx.test($("#zip-input").val())) {
+    $("#submit-search").attr("disabled", false);
+  } else {
+    $("#submit-search").attr("disabled", true);
+  }
+}
+
 
 // ! listen for user input of zip code
-$('#submit-search').on("click", function (event) {
+$("#submit-search").on("click", function (event) {
   event.preventDefault();
   reset();
 
-  $('#map').css("visibility", "visible");
-  $('#reset-search').css("visibility", "visible");
+  $("#map").css("visibility", "visible");
+  $("#reset-search").css("visibility", "visible");
 
-  var zipCode = $('#zip').val();
-  var search = $('#search-limit').val();
+  var zipCode = $("#zip-input").val();
+  var search = $("#search-limit").val();
 
   userloc = zipCode;
 
@@ -130,8 +144,7 @@ $('#submit-search').on("click", function (event) {
             var barBtn = $("<button>");
             barBtn.addClass("btn btn-light btn-lg bar-btn");
             barBtn.html(
-              data.businesses[i].name +
-              "<br>" + [data.businesses[i].price]
+              data.businesses[i].name + "<br>" + [data.businesses[i].price]
             );
             barBtn.attr("bar-code", [data.businesses[i].id]);
             barBtn.appendTo(".barDiv");
@@ -158,8 +171,8 @@ $('#submit-search').on("click", function (event) {
             initMap();
           }
           $(".bar-btn").on("click", function () {
-            var newBusinessID = ($(this).attr('bar-code'));
-            businessID = newBusinessID
+            var newBusinessID = $(this).attr("bar-code");
+            businessID = newBusinessID;
 
             // todo This URL is used to query the API for a particular bar
             var buzzDetailURL =
@@ -181,17 +194,20 @@ $('#submit-search').on("click", function (event) {
                   xhr.setRequestHeader("X-Requested-With", "true");
                 },
                 success: function (data) {
-                  $('.info,.image-here,.reviews').empty();
+                  $(".info,.image-here,.reviews").empty();
                   console.log(data);
-                  $('.dynamic').css("visibility", "visible");
+                  $(".dynamic").css("visibility", "visible");
                   var name = $("<h2>").html(data.name);
                   name.addClass("bar-name");
-                  var price = $("<h4>").html("Price: " + data.price);
-                  var rating = $("<h4>").html("Rating: " + data.rating);
-                  var cat = $("<h4>").html("Category: " + data.categories[0].title);
-                  var addr = $("<h4>").html("Street address: " + data.location.display_address);
+                  var price = $("<h4>").html("Price: " + data.price + "  |  " + "    Rating: " + data.rating);
+                  var cat = $("<h4>").html(
+                    "Category: " + data.categories[0].title
+                  );
+                  var addr = $("<h4>").html(
+                    "Street address: " + data.location.display_address
+                  );
                   var phone = $("<h4>").html("Phone: " + data.display_phone);
-                  $(".info").append(name, price, rating, cat, addr, phone);
+                  $(".info").append(name, price, cat, addr, phone);
 
                   // ? adding photos
                   for (let j = 0; j < data.photos.length; j++) {
@@ -217,11 +233,11 @@ $('#submit-search').on("click", function (event) {
 
                 success: function (data) {
                   var reviewTitle = $("<h2>").html("Photos and Reviews");
-                  reviewTitle.css('text-align', 'center');
+                  reviewTitle.css("text-align", "center");
                   $(".info").append(reviewTitle);
                   for (let k = 0; k < data.reviews.length; k++) {
                     var reviews = $("<h5>").html(data.reviews[k].text);
-                    reviews.addClass('user-reviews')
+                    reviews.addClass("user-reviews");
                     $(".reviews").append(reviews);
                   }
                 }
@@ -229,20 +245,14 @@ $('#submit-search').on("click", function (event) {
             }
 
             getDataByID();
-          })
+          });
         }
         barButton();
       }
     });
   }
 
-
-
-
-
   getData();
-})
-
-
+});
 
 // }

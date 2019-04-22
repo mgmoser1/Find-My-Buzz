@@ -1,7 +1,3 @@
-// ! going to use this to test various icons
-
-
-
 // ? This is for the GOOGLE Map API ??????
 function initMap() {
   var map = new google.maps.Map(document.getElementById('map'), {
@@ -54,6 +50,19 @@ var catArray = [];
 var userloc = null;
 
 var searchLimit = 0;
+
+// ! function for validation
+var zipValue = $("#zip-input").val
+var regEx = /\b\d{5}\b/g;
+
+function zipValidation() {
+  if (regEx.test($("#zip-input").val())) {
+    $("#submit-search").attr("disabled", false);
+  } else {
+    $("#submit-search").attr("disabled", true);
+  }
+}
+
 
 // ! This resets the prior search
 function reset() {
@@ -139,10 +148,8 @@ $('#submit-search').on("click", function (event) {
             var cats = [data.businesses[i].categories[0].alias];
             catArray.push(cats);
             catArray = catArray;
-
             initMap();
           }
-          console.log(catArray);
         }
         barButton();
       }
