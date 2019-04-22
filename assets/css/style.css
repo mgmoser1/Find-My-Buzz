@@ -1,0 +1,90 @@
+/* Page 1 basics */
+
+body {
+  height: 100vh;
+}
+
+h1 {
+  font-size: 70px;
+  padding: 50px;
+}
+
+.user-input {
+  border: rgb(83, 161, 175) solid;
+}
+
+#instructions {
+  font-size: 30px;
+  color: white;
+}
+
+#map {
+  height: 800px;
+  width: 90%;
+  padding: 50px;
+  margin: auto;
+  visibility: hidden;
+}
+
+a {
+  color: white;
+}
+
+h1,
+h3 {
+  text-align: center;
+}
+
+h3 {
+  padding-top: 50px;
+  font-style: italic;
+}
+
+.btn-light {
+  width: 80%;
+  margin: .5em 0;
+}
+
+#submit-search,
+#reset-search {
+  font-size: 20px;
+  padding: 1em 2em;
+}
+
+#reset-search {
+  visibility: hidden;
+}
+
+
+
+/* ! CSS for index2 with bar info */
+
+.bar-name {
+  text-align: center;
+  font-weight: 700;
+  color: blue;
+}
+
+img {
+  width: 31%;
+  margin: .5em;
+}
+
+.dynamic {
+  visibility: hidden;
+}
+
+.user-reviews {
+  font-style: italic;
+  font-size: 20px;
+  padding-bottom: 1em;
+  text-align: unset;
+  margin-right: 1em;
+  font
+}
+
+/* for Index2 */
+btn-success {
+  font-size: 20px;
+  padding: 1em 2em;
+}
