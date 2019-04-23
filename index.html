@@ -8,16 +8,14 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" />
-
   <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> -->
-  <link rel="stylesheet" type="text/css" href="./assets/css/style.css" />
+  <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
   <!-- <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script> -->
 
 </head>
 <html>
 
 <body>
-
   <div class="container-fluid">
 
 
@@ -44,7 +42,7 @@
                 </select>
               </div>
               <button type="submit" class="btn btn-primary submit-search" id="submit-search"
-                disabled="true">Submit</button>
+              >Submit</button> <!-- disabled="true" -->
               <button type="reset" class="btn btn-danger reset-search float-right" id="reset-search">Reset</button>
             </div>
           </form>
@@ -65,7 +63,7 @@
           </div>
 
         </div>
-        <div class="bar-sub"">
+        <div class="bar-sub">
 
         </div>
       </div>
@@ -77,9 +75,9 @@
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 id="exampleModalLabel">Hello</h5>
+                <h5 id="modal-title">Hello</h5>
               </div>
-              <div class="modal-body" id="modal-body">
+              <div class="modal-body" id="modal-text">
                 <form>
                   <div class="form-group">
                     <label for="comment">Comment:</label>
@@ -104,12 +102,12 @@
           integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
         </script>
         <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
-        </script>
-        <script src="./assets/js/buzz.js">
-        </script>
+        
+        <script src="assets/js/buzz.js"></script>
         <script async defer
           src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2Z73bHqtsEJuas82kslWAoAegg5Rxrco&libraries=places&callback=initMap">
         </script>
+
 </body>
 
 
