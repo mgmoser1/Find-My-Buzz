@@ -1,6 +1,6 @@
 // ? Changes to JS ... 
 // var ourIcon = "https://i.imgur.com/ndJRlf9.png"
- var ourIcon = "https://img.icons8.com/android/24/000000/beer-bottle.png";
+var ourIcon = "https://img.icons8.com/android/24/000000/beer-bottle.png";
 
 // Initialize Firebase
 var config = {
@@ -18,6 +18,93 @@ firebase.initializeApp(config);
 
 // this is the variable to use when pushing to / pulling from firebase
 var barDB = firebase.database().ref();
+
+// ! This function gets the user's Lat and Long via the Google Geocode API using an Axios Call
+function getLatLng(userAddress) {
+  axios
+    .get("https://maps.googleapis.com/maps/api/geocode/json", {
+      params: {
+        address: userAddress,
+        key: "AIzaSyA2Z73bHqtsEJuas82kslWAoAegg5Rxrco"
+      }
+    })
+    .then(function (response) {
+      var formattedAddress = response.data.results[0].formatted_address;
+      var newUserLat = response.data.results[0].geometry.location.lat;
+      var newUserLng = response.data.results[0].geometry.location.lng;
+
+      var startAddress = $("<h5>").html("From: " + formattedAddress);
+
+      $(".uber-response").append(startAddress);
+      userLat = newUserLat;
+      userLng = newUserLng;
+      callUber();
+    })
+    .catch(function (error) {
+      console.log("The error looks like " + error);
+    });
+}
+
+//  ! Geocoding Uber Button listner
+$(document).on("click", "#submit-uber", function (event) {
+  // event.preventDefault();
+  var newUserAddress = $("#user-address").val();
+  userAddress = newUserAddress;
+  getLatLng(userAddress);
+});
+
+var uberAuth =
+  "JA.VUNmGAAAAAAAEgASAAAABwAIAAwAAAAAAAAAEgAAAAAAAAG8AAAAFAAAAAAADgAQAAQAAAAIAAwAAAAOAAAAkAAAABwAAAAEAAAAEAAAABpGg-51QEZ8EHAiodL3YIhsAAAAL-iyVo5k0UELpA9d_GrHIrh-1SIJliQXRFob4LRgAG8bnETC2jFSU8XZ8Yt5j0dResiOKBiB8P_FUxoUmfsWZFNa9UVRWcwboCZE3Pg1RSNMTUJPn8uSJWxPXhY6y_WY4Vu5U5hkLiFwWPMPDAAAAAYqxrsv0HOtXEF7viQAAABiMGQ4NTgwMy0zOGEwLTQyYjMtODA2ZS03YTRjZjhlMTk2ZWU";
+
+// ! Uber Information Function
+function callUber() {
+  var uberURL =
+    "https://cors-anywhere.herokuapp.com/https://api.uber.com/v1.2/estimates/price?start_latitude=" +
+    userLat +
+    "&start_longitude=" +
+    userLng +
+    "&end_latitude=" +
+    barLat +
+    "&end_longitude=" +
+    barLng;
+
+  // ? This retreives the barLat and barLng from sessionStorage
+  barLat = sessionStorage.getItem("barLat");
+  barLng = sessionStorage.getItem("barLng");
+  var barName = sessionStorage.getItem("barName");
+
+  $.ajax({
+    url: uberURL,
+    type: "GET",
+    beforeSend: function (xhr) {
+      xhr.setRequestHeader("Authorization", "Bearer " + uberAuth);
+    }
+  }).then(function (response) {
+    var endAddress = $("<h5>").html("To: " + barName);
+    // $(".uber-response").empty();
+    var totalDistance = $("<h5>").html(
+      "Distance: " + response.prices[0].distance
+    );
+
+    for (m = 0; m < response.prices.length; m++) {
+      var typeCar = $("<h6>");
+      typeCar.html("Type: " + response.prices[0].display_name);
+      var fee = $("<h6>");
+      fee.html("Fee: " + response.prices[0].estimate);
+
+      // console.log("Type: " + response.prices[0].display_name);
+      // console.log("Fee Estimate: " + response.prices[m].estimate);
+    }
+
+    $(".uber-response").append(endAddress, totalDistance, typeCar, fee);
+  });
+}
+
+// ? This was added to the getDataByID Function
+// * sessionStorage.setItem("barLat", barLat);
+// * sessionStorage.setItem("barLng", barLng);
+// * sessionStorage.setItem("barName", data.name);
+
 
 
 // ? This is for the GOOGLE Map API ??????
@@ -339,8 +426,8 @@ $(document).on("click", ".bar-code", function () {
             // console.log(busID);
 
             if (busID === n) {
-            //  var existingComments = $('<div class="existing-comment">').text(comments);
-            //  var existingUserName = $('<div class="existing-user-name">').text(userName);
+              //  var existingComments = $('<div class="existing-comment">').text(comments);
+              //  var existingUserName = $('<div class="existing-user-name">').text(userName);
               var nameandComment = $('<div class="existing-name-comment">').text(userName + "- " + comments);
 
               $(barData2).append(nameandComment);
@@ -364,9 +451,18 @@ $(document).on("click", ".bar-code", function () {
 
         $('.bar-sub').append(photoDiv, barData, barData2, barData3);
 
-        //  $('.bar-container').html(photoDiv); // Not working
-
         getreviewsByID();
+
+        // ? Added for callUber
+
+        barLat = data.coordinates.latitude;
+        barLng = data.coordinates.longitude;
+
+        // Storing the Data in Local Storage for Uber
+        sessionStorage.setItem("barLat", barLat);
+        sessionStorage.setItem("barLng", barLng);
+        sessionStorage.setItem("barName", data.name);
+
       }
     });
   }
