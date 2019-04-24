@@ -47,7 +47,7 @@ function getLatLng(userAddress) {
 
 //  ! Geocoding Uber Button listner
 $(document).on("click", "#submit-uber", function (event) {
-  // event.preventDefault();
+  event.preventDefault();
   var newUserAddress = $("#user-address").val();
   userAddress = newUserAddress;
   getLatLng(userAddress);
@@ -86,15 +86,19 @@ function callUber() {
       "Distance: " + response.prices[0].distance
     );
 
-    for (m = 0; m < response.prices.length; m++) {
-      var typeCar = $("<h6>");
-      typeCar.html("Type: " + response.prices[0].display_name);
-      var fee = $("<h6>");
-      fee.html("Fee: " + response.prices[0].estimate);
 
-      // console.log("Type: " + response.prices[0].display_name);
-      // console.log("Fee Estimate: " + response.prices[m].estimate);
-    }
+    console.log("distance: " + response.prices[0].distance);
+    console.log("type: " + response.prices[0].distance);
+    console.log("rate: " + response.prices[0].distance);
+
+
+    var typeCar = $("<h6>");
+    typeCar.html("Type: " + response.prices[0].display_name);
+    var fee = $("<h6>");
+    fee.html("Fee: " + response.prices[0].estimate);
+
+    console.log("Type: " + response.prices[0].display_name);
+    console.log("Fee Estimate: " + response.prices[m].estimate);
 
     $(".uber-response").append(endAddress, totalDistance, typeCar, fee);
   });
@@ -336,6 +340,8 @@ $(document).on("click", ".bar-code", function () {
         var addr = $('<p>').html('Address: ' + data.location.display_address);
         var phone = $('<p>').html('Phone: ' + data.display_phone);
         // BarData2
+
+        // ! This section is for the Buzzer Reviews ... Going to copy it for Dynamic Uber Card
         var buzzReviewTitle = $("<h4>").text("Buzzer Reviews");
 
         /////   Comment Form   /////
@@ -353,20 +359,38 @@ $(document).on("click", ".bar-code", function () {
 
         var commentSubmit = $('<button type="submit" class="btn btn-success" id="comment-input-submit" data-toggle="modal" data-target="#commentInfoModal" data-point="businessID">').html("Submit");
 
+        // ? Repeating for UBER Card
+        var uberTitle = $("<h4>").text("Order Uber");
+        var uberCard = $('<div class="card" style="width:50rem;">');
+        var uberCardBody = $('<div class="card-body">');
+        var uberCardTitle = $('<h5 class="card-title">').text("Need a Lift?");
+        var uberForm = $('<form>');
+        var uberDiv = $('<div class="form-group text-center">');
+        var addressLabel = $('<label for="user-address">').html("Address");
+        var userAddress = $('<input type="text" class="form-control" id="user-address" placeholder="123 Main Street, Dallas, TX">');
+
+        var uberSubmit = $('<button type="submit" class="btn btn-primary btn-block" id="submit-uber" >').html("Submit");
+        uberSubmit.html('<h5>' + 'check for' + '<i class="fab fa-uber fa-lg"></i></h5>')
 
         $('.bar-sub').empty();
-
         $(yourName).append(newNameLabel, newNameInput);
         $(yourComment).append(newCommentLabel, newCommentInput);
         $(commentForm).append(yourName, yourComment, commentSubmit);
         $(cardBody).append(cardTitle, commentForm);
         $(commentCard).append(cardBody);
 
+
+        $(uberForm).append(uberDiv, addressLabel, userAddress, uberSubmit);
+        $(uberCardBody).append(uberCardTitle, uberForm);
+        $(uberCard).append(uberCardBody);
+
         var barData = $('<div class="bar-info">');
         var barData2 = $('<div class="bar-info-2">');
         var barData3 = $('<div class="bar-info-3">');
         var photoDiv = $('<div class="image-here">');
 
+        var uberData = $('<div class="uber-card">');
+        var uberData2 = $('<div class="uber-response">');
 
         //   debugger
         //         $(".info").append(name, price, cat, addr, phone, coords);
@@ -377,8 +401,7 @@ $(document).on("click", ".bar-code", function () {
           $(photoDiv).append(photos);
         }
 
-
-
+        $(uberData).append(uberTitle, uberCard);
 
 
         //   if (data.categories[0]) {
@@ -449,7 +472,7 @@ $(document).on("click", ".bar-code", function () {
 
 
 
-        $('.bar-sub').append(photoDiv, barData, barData2, barData3);
+        $('.bar-sub').append(photoDiv, barData, barData2, barData3, uberData, uberData2);
 
         getreviewsByID();
 
