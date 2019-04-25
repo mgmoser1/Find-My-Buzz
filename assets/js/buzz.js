@@ -21,6 +21,8 @@ firebase.initializeApp(config);
 var barDB = firebase.database().ref();
 
 // ! This function gets the user's Lat and Long via the Google Geocode API using an Axios Call
+var startAddress;
+
 function getLatLng(userAddress) {
   axios
     .get("https://maps.googleapis.com/maps/api/geocode/json", {
@@ -34,7 +36,7 @@ function getLatLng(userAddress) {
       var newUserLat = response.data.results[0].geometry.location.lat;
       var newUserLng = response.data.results[0].geometry.location.lng;
 
-      var startAddress = $("<h5>").html("From: " + formattedAddress);
+      var startAddress = $('<h5 class="card-title">').text("From: " + formattedAddress);
 
       $(".uber-response").append(startAddress);
       userLat = newUserLat;
@@ -43,16 +45,17 @@ function getLatLng(userAddress) {
 
         callUber();
       } else {
-        var title = 'ERROR: out of State';
-        var content = 'Please enter an address in Dallas';
+        var title = 'ERROR: out of area';
+        var content = 'Currently this function only works in and around Dallas';
         createModal(title, content);
       }
     })
     .catch(function (error) {
-      console.log("The error looks like " + error);
+      var title = 'ERROR: ID10T';
+      var content = 'We have an input error.  Try entering a different zip!';
+      createModal(title, content);
     });
 }
-
 //  ! Geocoding Uber Button listner
 $(document).on("click", "#submit-uber", function (event) {
   event.preventDefault();
@@ -79,27 +82,56 @@ function callUber() {
   // ? This retreives the barLat and barLng from sessionStorage
   barLat = sessionStorage.getItem("barLat");
   barLng = sessionStorage.getItem("barLng");
-  var barName = sessionStorage.getItem("barName");
 
   $.ajax({
-    url: uberURL,
-    type: "GET",
-    beforeSend: function (xhr) {
-      xhr.setRequestHeader("Authorization", "Bearer " + uberAuth);
-    }
-  }).then(function (response) {
-    var totalDistance = $("<h5>").html(
-      "Distance: " + response.prices[0].distance
-    );
+      url: uberURL,
+      type: "GET",
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader("Authorization", "Bearer " + uberAuth);
+      }
+    }).then(function (response) {
+      var totalDistance = $("<h5>").html(
+        "Distance: " + response.prices[0].distance
+      );
 
-    $(".uber-response").append(totalDistance);
+      var carTypes = [];
+      var uberDetailCardBody = $('<div class="card-body">');
+      var uberDetailCard = $('<div class="card">');
+      var uberData2 = $('<div class="card uber-card2">');
+      uberDetailCard.append(uberDetailCardBody);
+      // uberDetailCardBody.append(startAddress);
+      uberDetailCardBody.append(startAddress, totalDistance);
+      $(uberData2).append(uberDetailCard);
+      $(".uber-response").append(uberData2);
 
-    for (var i = 0; i < response.prices.length; i++) {
-      var typeCar = $("<h5>" + response.prices[i].display_name + " Fee: " + response.prices[i].estimate + "</h5>");
-      $(".uber-response").append(typeCar);
-    }
 
-  });
+      for (var i = 0; i < response.prices.length; i++) {
+        var typeCar = response.prices[i].display_name + " Fee: " + response.prices[i].estimate;
+        carTypes.push(typeCar);
+      }
+
+      var dropdown = $('<div class="dropdown">');
+      var dropdownButton = $('<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Uber Types</button>');
+      console.log("uber type: " + carTypes[0]);
+      var dropdownMenu = $('<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">');
+      var dropdownItem;
+
+      for (var j = 0; j < carTypes.length; j++) {
+        dropdownItem = $('<a class="dropdown-item href="#">' + carTypes[j] + '</a>');
+        dropdownMenu.append(dropdownItem);
+      }
+      dropdown.append(dropdownButton);
+      dropdown.append(dropdownMenu);
+      $(uberDetailCard).append(dropdown);
+
+    })
+    .catch(function (response) {
+      console.log('please try again');
+      $("#user-address").val('');
+      var title = 'ERROR: out of range';
+      var content = "Dude, where are you trying to go?  Try again!";
+      createModal(title, content);
+    })
 }
 
 // ? This is for the GOOGLE Map API ??????
@@ -231,46 +263,53 @@ $('#submit-search').on("click", function (event) {
         xhr.setRequestHeader("X-Requested-With", "true");
       },
       success: function (data) {
-        businessID = data.businesses[0].id;
-        businessName = data.businesses[1].name;
+        if (data.businesses.length !== 0) {
+          businessID = data.businesses[0].id;
+          businessName = data.businesses[1].name;
 
-        // ! This function will create buttons (Repeating element) for each bar on the 1st page
-        function barButton() {
+          // ! This function will create buttons (Repeating element) for each bar on the 1st page
+          function barButton() {
 
-          for (var i = 0; i < searchLimit; i++) {
-            var barBtn = $("<button>");
-            barBtn.addClass("btn btn-light btn-lg bar-btn bar-code");
-            barBtn.html(
-              data.businesses[i].name +
-              "<br>" + [data.businesses[i].price]
-            );
-            barBtn.attr("data-point", [data.businesses[i].id]);
-            barBtn.appendTo(".barDiv");
+            for (var i = 0; i < searchLimit; i++) {
+              var barBtn = $("<button>");
+              barBtn.addClass("btn btn-light btn-lg bar-btn bar-code");
+              barBtn.html(
+                data.businesses[i].name +
+                "<br>" + [data.businesses[i].price]
+              );
+              barBtn.attr("data-point", [data.businesses[i].id]);
+              barBtn.appendTo(".barDiv");
 
 
-            // !  Push the Bar Name, latitude, and longitude to array for the google map API
-            var namePush = nameArray.push(data.businesses[i].name);
-            newNameArray = namePush;
+              // !  Push the Bar Name, latitude, and longitude to array for the google map API
+              var namePush = nameArray.push(data.businesses[i].name);
+              newNameArray = namePush;
 
-            var lat = [data.businesses[i].coordinates.latitude];
-            latArray.push(lat);
+              var lat = [data.businesses[i].coordinates.latitude];
+              latArray.push(lat);
 
-            var lng = [data.businesses[i].coordinates.longitude];
-            lngArray.push(lng);
+              var lng = [data.businesses[i].coordinates.longitude];
+              lngArray.push(lng);
 
-            // ? This is needed to store the ID information for local storage
-            var addAll = [data.businesses[i].id];
-            idArray.push(addAll);
-            idArray = idArray;
+              // ? This is needed to store the ID information for local storage
+              var addAll = [data.businesses[i].id];
+              idArray.push(addAll);
+              idArray = idArray;
 
-            // ! not necessary ... but with this array we could change the icons according to the categories with a series of if statements
-            var cats = [data.businesses[i].categories[0].alias];
-            catArray.push(cats);
-            catArray = catArray;
-            initMap();
+              // ! not necessary ... but with this array we could change the icons according to the categories with a series of if statements
+              var cats = [data.businesses[i].categories[0].alias];
+              catArray.push(cats);
+              catArray = catArray;
+              initMap();
+            }
           }
+          barButton();
         }
-        barButton();
+        // fail: function (error) {
+        //   var title = 'ERROR: ID10T';
+        //   var content = 'We have an input error.  Try entering a different zip!';
+        //   createModal(title, content);
+        // }
       }
     });
   }
@@ -355,7 +394,7 @@ $(document).on("click", ".bar-code", function () {
 
 
         // ? Repeating for UBER Card
-        var uberTitle = $("<h4>").text("Order Uber");
+        // var uberTitle = $("<h4>").text("Order Uber");
         var uberCard = $('<div class="card">');
         var uberCardBody = $('<div class="card-body">');
         var uberCardTitle = $('<h5 class="card-title">').text("Need a Lift?");
@@ -391,6 +430,7 @@ $(document).on("click", ".bar-code", function () {
         var uberData = $('<div class="uber-card">');
 
 
+
         //   debugger
         //         $(".info").append(name, price, cat, addr, phone, coords);
         for (let j = 0; j < data.photos.length; j++) {
@@ -400,7 +440,7 @@ $(document).on("click", ".bar-code", function () {
           $(photoDiv).append(photos);
         }
         // debugger
-        $(uberData).append(uberTitle, uberCard);
+        $(uberData).append(uberCard);
         $('.uber-info').append(uberData);
 
         //   if (data.categories[0]) {
