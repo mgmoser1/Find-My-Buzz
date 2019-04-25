@@ -2,6 +2,7 @@
 // var ourIcon = "https://i.imgur.com/ndJRlf9.png"
 var ourIcon = "https://img.icons8.com/android/24/000000/beer-bottle.png";
 
+
 // Initialize Firebase
 var config = {
   apiKey: "AIzaSyChY5mXqIZ_vL2diYGm77VslwzNU5xwSrk",
@@ -87,17 +88,17 @@ function callUber() {
       xhr.setRequestHeader("Authorization", "Bearer " + uberAuth);
     }
   }).then(function (response) {
-    var endAddress = $("<h5>").html("To: " + barName);
-    // $(".uber-response").empty();
     var totalDistance = $("<h5>").html(
       "Distance: " + response.prices[0].distance
     );
 
-    var typeCar = $("<h5>");
-    typeCar.html("Type: " + response.prices[0].display_name);
-    var fee = $("<h5>");
-    fee.html("Fee: " + response.prices[0].estimate);
-    $(".uber-response").append(endAddress, totalDistance, typeCar, fee);
+    $(".uber-response").append(totalDistance);
+
+    for (var i = 0; i < response.prices.length; i++) {
+      var typeCar = $("<h5>" + response.prices[i].display_name + " Fee: " + response.prices[i].estimate + "</h5>");
+      $(".uber-response").append(typeCar);
+    }
+
   });
 }
 
@@ -164,12 +165,18 @@ var regEx = /\b\d{5}\b/g;
 function zipValidation() {
   if (regEx.test($("#zip-input").val())) {
     $("#submit-search").attr("disabled", false);
-    localStorage.setItem('zip', $("#zip-input").val()); // Local Storage
-    localStorage.setItem('search', $("#search-limit").val()); // Local Storage
-    localStorage.setItem('timestamp', Date().toString()); // Local Storage
+
     console.log(Date().toString()); // Local Storage 
   } else {
     $("#submit-search").attr("disabled", true);
+  }
+}
+
+function uberValidation() {
+  if ($("#submit-uber").val('')) {
+    $("#submit-uber").attr("disabled", true);
+  } else {
+    $("#submit-uber").attr("disabled", false);
   }
 }
 
@@ -193,9 +200,6 @@ $('#reset-search').on("click", function () {
 // ! listen for user input of zip code
 $('#submit-search').on("click", function (event) {
   event.preventDefault();
-
-
-
   var zipCode = $('#zip-input').val();
   var search = $('#search-limit').val();
   reset();
@@ -273,9 +277,7 @@ $('#submit-search').on("click", function (event) {
   getData();
 });
 
-// MODAL CREATION //  DOESN'T WORK. Creates modal but doesn't display it.
-// MODAL CREATION // Creates modal but doesn't display it.
-
+// Modal Creation Function
 function createModal(t, b) {
 
   var modalTitle = $("#modal-title");
@@ -300,9 +302,6 @@ $(document).on("click", ".bar-code", function () {
   console.log("businessID: " + businessID) //  working with hard coded value
   // Path for the second search by Bar ID. //
 
-
-
-
   var buzzDetailURL =
     'https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/' + businessID;
 
@@ -323,6 +322,9 @@ $(document).on("click", ".bar-code", function () {
       },
       success: function (data) {
 
+        if (!data.price) {
+          data.price = "It's a mystery!";
+        }
         //    var ident = data.id;
         // BarData
         var name = $('<h4>').html('Name: ' + data.name);
@@ -333,12 +335,11 @@ $(document).on("click", ".bar-code", function () {
         var addr = $('<p>').html('Address: ' + data.location.display_address);
         var phone = $('<p>').html('Phone: ' + data.display_phone);
 
-
         // ! This section is for the Buzzer Reviews ... Going to copy it for Dynamic Uber Card
         var buzzReviewTitle = $("<h4>").text("Buzzer Reviews");
 
         /////   Comment Form   /////
-        var commentCard = $('<div class="card" style="width:25rem;">');
+        var commentCard = $('<div class="card">');
         var cardBody = $('<div class="card-body">');
         var cardTitle = $('<h5 class="card-title">').text("Leave a comment!");
         var commentForm = $('<form>');
@@ -351,14 +352,11 @@ $(document).on("click", ".bar-code", function () {
         var newCommentInput = $('<input type="text" class="form-control" id="comment-input" placeholder="Comment">');
 
         var commentSubmit = $('<button type="submit" class="btn btn-success" id="comment-input-submit" data-toggle="modal" data-target="#commentInfoModal" data-point="businessID">').html("Submit");
-        // var uberRow = $('div class ="row"');
 
-        // var uberCol1 = $('div class ="col-6"');
-        // $('.uber-response').append(uberRow);
 
         // ? Repeating for UBER Card
         var uberTitle = $("<h4>").text("Order Uber");
-        var uberCard = $('<div class="card" style="width:50rem;">');
+        var uberCard = $('<div class="card">');
         var uberCardBody = $('<div class="card-body">');
         var uberCardTitle = $('<h5 class="card-title">').text("Need a Lift?");
         var uberForm = $('<form>');
@@ -391,7 +389,7 @@ $(document).on("click", ".bar-code", function () {
         var photoDiv = $('<div class="image-here">');
 
         var uberData = $('<div class="uber-card">');
-        var uberData2 = $('<div class="uber-response">');
+
 
         //   debugger
         //         $(".info").append(name, price, cat, addr, phone, coords);
@@ -403,7 +401,7 @@ $(document).on("click", ".bar-code", function () {
         }
         // debugger
         $(uberData).append(uberTitle, uberCard);
-
+        $('.uber-info').append(uberData);
 
         //   if (data.categories[0]) {
         //      var cat = $('<p>').html('Want to Delete This - Category: ' + data.categories[0].title);
@@ -464,14 +462,12 @@ $(document).on("click", ".bar-code", function () {
           });
 
           if (commentFound = false) {
-
             var noExisting = $('<h4 class="no-existing-comment">').text("Be the first Buzzer to review this spot!")
             $(barData2).append(noExisting);
-
           }
         }
 
-        $('.bar-sub').append(photoDiv, barData, barData2, barData3, uberData, uberData2);
+        $('.bar-sub').append(photoDiv, barData, barData2, barData3);
 
         getreviewsByID();
 
