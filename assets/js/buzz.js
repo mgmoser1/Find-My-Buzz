@@ -38,7 +38,14 @@ function getLatLng(userAddress) {
       $(".uber-response").append(startAddress);
       userLat = newUserLat;
       userLng = newUserLng;
-      callUber();
+      if (formattedAddress.includes('TX')) {
+
+        callUber();
+      } else {
+        var title = 'ERROR: out of State';
+        var content = 'Please enter an address in Dallas';
+        createModal(title, content);
+      }
     })
     .catch(function (error) {
       console.log("The error looks like " + error);
@@ -90,10 +97,6 @@ function callUber() {
     typeCar.html("Type: " + response.prices[0].display_name);
     var fee = $("<h5>");
     fee.html("Fee: " + response.prices[0].estimate);
-
-    console.log("Type: " + response.prices[0].display_name);
-    console.log("Fee Estimate: " + response.prices[0].estimate);
-
     $(".uber-response").append(endAddress, totalDistance, typeCar, fee);
   });
 }
@@ -329,7 +332,7 @@ $(document).on("click", ".bar-code", function () {
         var reviewHolder = $('<div id="reviews">');
         var addr = $('<p>').html('Address: ' + data.location.display_address);
         var phone = $('<p>').html('Phone: ' + data.display_phone);
-        // BarData2
+
 
         // ! This section is for the Buzzer Reviews ... Going to copy it for Dynamic Uber Card
         var buzzReviewTitle = $("<h4>").text("Buzzer Reviews");
@@ -348,6 +351,10 @@ $(document).on("click", ".bar-code", function () {
         var newCommentInput = $('<input type="text" class="form-control" id="comment-input" placeholder="Comment">');
 
         var commentSubmit = $('<button type="submit" class="btn btn-success" id="comment-input-submit" data-toggle="modal" data-target="#commentInfoModal" data-point="businessID">').html("Submit");
+        // var uberRow = $('div class ="row"');
+
+        // var uberCol1 = $('div class ="col-6"');
+        // $('.uber-response').append(uberRow);
 
         // ? Repeating for UBER Card
         var uberTitle = $("<h4>").text("Order Uber");
@@ -359,8 +366,10 @@ $(document).on("click", ".bar-code", function () {
         var addressLabel = $('<label for="user-address">').html("Address");
         var userAddress = $('<input type="text" class="form-control" id="user-address" placeholder="123 Main Street, Dallas, TX">');
 
-        var uberSubmit = $('<button type="submit" class="btn btn-primary btn-block" id="submit-uber" >').html("Submit");
+        var uberSubmit = $('<button type="submit" class="btn btn-primary btn-block mt-3" id="submit-uber" >').html("Submit");
         uberSubmit.html('<h5>' + 'check for' + '<i class="fab fa-uber fa-lg"></i></h5>')
+
+        // var uberCol2 = $('div class ="col-5"');
 
         $('.bar-sub').empty();
         $(yourName).append(newNameLabel, newNameInput);
@@ -369,6 +378,7 @@ $(document).on("click", ".bar-code", function () {
         $(cardBody).append(cardTitle, commentForm);
         $(commentCard).append(cardBody);
 
+        // $(uberRow).append(uberCol1);
 
         $(uberForm).append(uberDiv, addressLabel, userAddress, uberSubmit);
         $(uberCardBody).append(uberCardTitle, uberForm);
@@ -461,14 +471,11 @@ $(document).on("click", ".bar-code", function () {
           }
         }
 
-
-
         $('.bar-sub').append(photoDiv, barData, barData2, barData3, uberData, uberData2);
 
         getreviewsByID();
 
         // ? Added for callUber
-
         barLat = data.coordinates.latitude;
         barLng = data.coordinates.longitude;
 
@@ -485,8 +492,6 @@ $(document).on("click", ".bar-code", function () {
   getDataByID();
 
   // COMMENT SUBMIT ONCLICK //
-
-
   // ! hi
 
   $(document).on("click", "#comment-input-submit", function () {
