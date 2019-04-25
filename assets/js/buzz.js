@@ -86,30 +86,17 @@ function callUber() {
       "Distance: " + response.prices[0].distance
     );
 
-
-    console.log("distance: " + response.prices[0].distance);
-    console.log("type: " + response.prices[0].distance);
-    console.log("rate: " + response.prices[0].distance);
-
-
-    var typeCar = $("<h6>");
+    var typeCar = $("<h5>");
     typeCar.html("Type: " + response.prices[0].display_name);
-    var fee = $("<h6>");
+    var fee = $("<h5>");
     fee.html("Fee: " + response.prices[0].estimate);
 
     console.log("Type: " + response.prices[0].display_name);
-    console.log("Fee Estimate: " + response.prices[m].estimate);
+    console.log("Fee Estimate: " + response.prices[0].estimate);
 
     $(".uber-response").append(endAddress, totalDistance, typeCar, fee);
   });
 }
-
-// ? This was added to the getDataByID Function
-// * sessionStorage.setItem("barLat", barLat);
-// * sessionStorage.setItem("barLng", barLng);
-// * sessionStorage.setItem("barName", data.name);
-
-
 
 // ? This is for the GOOGLE Map API ??????
 function initMap() {
@@ -186,6 +173,7 @@ function zipValidation() {
 
 // ! This resets the prior search
 function reset() {
+  $('#zip-input').val('');
   $('#map').css("visibility", "hidden");
   $('.barDiv').empty();
   $('#reset-search').css("visibility", "hidden");
@@ -202,13 +190,15 @@ $('#reset-search').on("click", function () {
 // ! listen for user input of zip code
 $('#submit-search').on("click", function (event) {
   event.preventDefault();
-  reset();
 
-  $('#map').css("visibility", "visible");
-  $('#reset-search').css("visibility", "visible");
+
 
   var zipCode = $('#zip-input').val();
   var search = $('#search-limit').val();
+  reset();
+  $('#map').css("visibility", "visible");
+  $('#reset-search').css("visibility", "visible");
+
 
   userloc = zipCode;
 
@@ -383,6 +373,7 @@ $(document).on("click", ".bar-code", function () {
         $(uberForm).append(uberDiv, addressLabel, userAddress, uberSubmit);
         $(uberCardBody).append(uberCardTitle, uberForm);
         $(uberCard).append(uberCardBody);
+        // $(uberCard).append(uberCardBody);
 
         var barData = $('<div class="bar-info">');
         var barData2 = $('<div class="bar-info-2">');
@@ -400,7 +391,7 @@ $(document).on("click", ".bar-code", function () {
           photos.css("height", "200px");
           $(photoDiv).append(photos);
         }
-
+        // debugger
         $(uberData).append(uberTitle, uberCard);
 
 
