@@ -11,13 +11,13 @@
   <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> -->
   <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
   <!-- <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script> -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 </head>
 <html>
 
 <body>
   <div class="container-fluid">
-
 
     <h1>Find My Buzz</h1>
     <div class="bar-container">
@@ -37,12 +37,10 @@
                 <select class="form-control" id="search-limit">
                   <option selected>5</option>
                   <option>10</option>
-                  <option>15</option>
-                  <option>20</option>
                 </select>
               </div>
-              <button type="submit" class="btn btn-primary submit-search" id="submit-search"
-              >Submit</button> <!-- disabled="true" -->
+              <button type="submit" class="btn btn-primary submit-search" id="submit-search">Submit</button>
+              <!-- disabled="true" -->
               <button type="reset" class="btn btn-danger reset-search float-right" id="reset-search">Reset</button>
             </div>
           </form>
@@ -67,46 +65,74 @@
 
         </div>
       </div>
+
+
+      <!-- * Added by Michael for the Uber Button - we can do this dynamically afterwards -->
+
+
+      <!-- ? trying to create this dynamically
+        <div class="form-group text-center col-4">
+        <label for="user-address">
+          <h3>Need a lift?</h3>
+        </label>
+        <input type="text" class="form-control" id="user-address" placeholder="123 Main Street, Dallas, TX">
+
+        <button type="submit" class="btn btn-primary btn-block" id="submit-uber">
+          <h5>Check for <i class="fab fa-uber fa-lg"></i></h5>
+        </button>
+        </form>
+      </div>
+      <div class="uber-response mt-5 text-left">
+      </div> -->
+
+
+
+
+
+
     </div> <!-- End bar-container -->
   </div> <!-- End container-fluid -->
 
-  <!-- Modal -->
-<div class=" modal" id="my-modal">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 id="modal-title">Hello</h5>
-              </div>
-              <div class="modal-body" id="modal-text">
-                <form>
-                  <div class="form-group">
-                    <label for="comment">Comment:</label>
-                    <textarea class="form-control" rows="5" id="comment"></textarea>
-                  </div>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <script src=" https://code.jquery.com/jquery-3.4.0.min.js"
-          integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous">
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-          integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
-        </script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-          integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-        </script>
-        <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
-        
-        <script src="assets/js/buzz.js"></script>
-        <script async defer
-          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2Z73bHqtsEJuas82kslWAoAegg5Rxrco&libraries=places&callback=initMap">
-        </script>
+
+
+  <!-- Modal -->
+  <div class=" modal" id="my-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 id="modal-title">Hello</h5>
+        </div>
+        <div class="modal-body" id="modal-text">
+          <form>
+            <div class="form-group">
+              <label for="comment">Comment:</label>
+              <textarea class="form-control" rows="5" id="comment"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src=" https://code.jquery.com/jquery-3.4.0.min.js"
+    integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
+
+  <script src="assets/js/buzz.js"></script>
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2Z73bHqtsEJuas82kslWAoAegg5Rxrco&libraries=places&callback=initMap">
+  </script>
 
 </body>
 
