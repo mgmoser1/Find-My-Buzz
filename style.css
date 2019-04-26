@@ -1,0 +1,121 @@
+/* Page 1 basics */
+
+body {
+  height: 100vh;
+  background: black;
+}
+
+.card {
+  background-color: black;
+}
+
+.toppic {
+  text-align: center;
+}
+
+h4 {
+  color: white;
+  text-align: center;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.form-group {
+  color: white;
+}
+
+#instructions {
+  font-size: 30px;
+  color: white;
+}
+
+#map {
+  height: 400px;
+  width: 100%;
+  padding: 50px;
+  margin: auto;
+  visibility: hidden;
+}
+
+a {
+  color: white;
+}
+
+h1,
+h3 {
+  text-align: center;
+}
+
+h3 {
+  padding-top: 50px;
+  font-style: italic;
+}
+
+.btn-light {
+  width: 227px;
+  margin: .5em .2em;
+  height: 75px;;
+
+}
+
+#submit-search,
+#reset-search {
+  font-size: 20px;
+}
+
+#reset-search {
+  visibility: hidden;
+}
+
+
+
+/* ! CSS for index2 with bar info */
+
+.stretch {
+  align-content: stretch;
+}
+
+.bar-name {
+  text-align: center;
+  font-weight: 700;
+  color: white;
+}
+.bar-info {
+  color: white;
+}
+
+
+p {
+  color: white;
+}
+
+img {
+  width: 31%;
+  margin: .5em;
+}
+
+h4 {
+  color: white;
+}
+
+.dynamic {
+  visibility: hidden;
+}
+
+.user-reviews {
+  font-style: italic;
+  font-size: 20px;
+  padding-bottom: 1em;
+  text-align: unset;
+  margin-right: 1em;
+  color: white;
+}
+
+.uber-info {
+  color: white;
+}
+
+/* for Index2 */
+btn-success {
+  font-size: 20px;
+  padding: 1em 2em;
+}
