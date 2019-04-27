@@ -126,7 +126,7 @@ h4 {
   color: white;
 }
 
-.uber-info {
+.uber-info, .uber-response {
   color: white;
 }
 
@@ -136,6 +136,6 @@ btn-success {
   padding: 1em 2em;
 }
 
-#yelp-card, #buzzer-card, #comment-card, #uber-submit-card, #uber-response {
+#yelp-card, #buzzer-card, #comment-card, #uber-submit-card, .uber-response {
   padding-bottom: 30px;
 }

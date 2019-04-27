@@ -12,14 +12,16 @@
   <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
   <!-- <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script> -->
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script type="text/javascript" src="https://unpkg.com/default-passive-events"></script>
 
 </head>
 <html>
 
 <body>
   <div class="container-fluid">
-
+    <div class= "text-center">
     <h1>Find My Buzz</h1>
+  </div>
     <div class="bar-container">
       <!-- Megan added. Need this to clear the page before loading page 2. -->
       <div class="user-form ">
@@ -69,7 +71,7 @@
           <div class="col-5">
             <div class="uber-info"></div>
           </div>
-          <div class="col-6">
+          <div class="col-6" id="uber-response-container">
             <div class="uber-response">
             </div>
           </div>
@@ -77,28 +79,6 @@
 
 
       </div>
-
-
-
-      <!-- * Added by Michael for the Uber Button - we can do this dynamically afterwards -->
-
-
-      <!-- ? trying to create this dynamically
-        <div class="form-group text-center col-4">
-        <label for="user-address">
-          <h3>Need a lift?</h3>
-        </label>
-        <input type="text" class="form-control" id="user-address" placeholder="123 Main Street, Dallas, TX">
-        <button type="submit" class="btn btn-primary btn-block" id="submit-uber">
-          <h5>Check for <i class="fab fa-uber fa-lg"></i></h5>
-        </button>
-        </form>
-      </div>
-      <div class="uber-response mt-5 text-left">
-      </div> -->
-
-
-
 
 
 
