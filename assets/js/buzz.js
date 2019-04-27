@@ -20,7 +20,7 @@ firebase.initializeApp(config);
 // this is the variable to use when pushing to / pulling from firebase
 var barDB = firebase.database().ref();
 
-var uberResponseCardContainer = $('<div class="card buzzer-card" style="width: 24rem;">');
+var uberResponseCardContainer = $('<div class="card buzzer-card" style="width: 24rem; margin-bottom: 30px;"">');
 var uberResponseCardBody = $('<div class="card-body buzz-review-body">');
 
 // ! This function gets the user's Lat and Long via the Google Geocode API using an Axios Call
@@ -395,7 +395,7 @@ $(document).on("click", ".bar-code", function () {
         var price = $('<p>').html('Price: ' + data.price);
         var rating = $('<p>').html('Rating: ' + data.rating);
         var reviewCount = $('<p>').html('Reviews Total: ' + data.review_count);
-        var reviewCardContainer = $('<div class="card" id="yelp-card" style="width: 24rem;">');
+        var reviewCardContainer = $('<div class="card" id="yelp-card" style="width: 24rem; margin-top: 30px; margin-bottom: 30px;">');
         var addr = $('<p>').html('Address: ' + data.location.display_address);
         var phone = $('<p>').html('Phone: ' + data.display_phone);
 
@@ -403,7 +403,7 @@ $(document).on("click", ".bar-code", function () {
         var buzzReviewTitle = $("<h4>").text("Buzzer Reviews");
 
         // Buzzer Review Card //
-        var buzzReviewCardContainer = $('<div class="card" id="buzzer-card" style="width: 24rem;">');
+        var buzzReviewCardContainer = $('<div class="card" id="buzzer-card" style="width: 24rem; margin-bottom: 30px;">');
         var buzzReviewCardBody = $('<div class="card-body buzz-review-body">');
         var buzzReviewCardTitle = $('<h5 class="card-title">').html("Buzzer Reviews");
                
@@ -412,7 +412,7 @@ $(document).on("click", ".bar-code", function () {
 
 
         /////   Comment Form   /////
-        var commentCard = $('<div class="card">');
+        var commentCard = $('<div class="card"style="margin-bottom: 30px;">');
         var cardBody = $('<div class="card-body">');
         var cardTitle = $('<h5 class="card-title">').text("Leave a comment!");
         var commentForm = $('<form>');
@@ -429,7 +429,7 @@ $(document).on("click", ".bar-code", function () {
 
         // ? Repeating for UBER Card
         // var uberTitle = $("<h4>").text("Order Uber");
-        var uberCard = $('<div class="card">');
+        var uberCard = $('<div class="card" style="margin-bottom: 30px;">');
         var uberCardBody = $('<div class="card-body">');
         var uberCardTitle = $('<h5 class="card-title">').text("Need a Lift?");
         var uberForm = $('<form>');
