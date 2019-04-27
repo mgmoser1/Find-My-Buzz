@@ -20,6 +20,9 @@ firebase.initializeApp(config);
 // this is the variable to use when pushing to / pulling from firebase
 var barDB = firebase.database().ref();
 
+var uberResponseCardContainer = $('<div class="card buzzer-card" style="width: 24rem;">');
+var uberResponseCardBody = $('<div class="card-body buzz-review-body">');
+
 // ! This function gets the user's Lat and Long via the Google Geocode API using an Axios Call
 var startAddress;
 
@@ -36,9 +39,15 @@ function getLatLng(userAddress) {
       var newUserLat = response.data.results[0].geometry.location.lat;
       var newUserLng = response.data.results[0].geometry.location.lng;
 
-      var startAddress = $('<h5 class="card-title">').text("From: " + formattedAddress);
+  //    var startAddress = $('<h5 class="card-title">').text("From: " + formattedAddress);
 
-      $(".uber-response").append(startAddress);
+  //    $(".uber-response").append(startAddress);
+
+      var uberResponseCardTitle = $('<h5 class="card-title">').html("From: " + formattedAddress);
+      $(uberResponseCardBody).append(uberResponseCardTitle);
+      $(uberResponseCardContainer).append(uberResponseCardBody);
+      $(".uber-response").append(uberResponseCardContainer);
+
       userLat = newUserLat;
       userLng = newUserLng;
       if (formattedAddress.includes('TX')) {
@@ -94,15 +103,19 @@ function callUber() {
         "Distance: " + response.prices[0].distance
       );
 
+      var uberResponseCardContent = $('<div class="uber-response-content">');
+      $(uberResponseCardContent).append(totalDistance);
+
       var carTypes = [];
-      var uberDetailCardBody = $('<div class="card-body">');
-      var uberDetailCard = $('<div class="card">');
-      var uberData2 = $('<div class="card uber-card2">');
-      uberDetailCard.append(uberDetailCardBody);
+//      var uberDetailCardBody = $('<div class="card-body">');
+//      var uberDetailCard = $('<div class="card">');
+//      var uberData2 = $('<div class="card uber-card2">');
+//      uberDetailCard.append(uberDetailCardBody);
       // uberDetailCardBody.append(startAddress);
-      uberDetailCardBody.append(startAddress, totalDistance);
-      $(uberData2).append(uberDetailCard);
-      $(".uber-response").append(uberData2);
+//      uberDetailCardBody.append(startAddress, totalDistance);
+//      $(uberData2).append(uberDetailCard);
+//      $(".uber-response").append(uberData2);
+
 
 
       for (var i = 0; i < response.prices.length; i++) {
@@ -122,7 +135,11 @@ function callUber() {
       }
       dropdown.append(dropdownButton);
       dropdown.append(dropdownMenu);
-      $(uberDetailCard).append(dropdown);
+  //    $(uberDetailCard).append(dropdown);
+
+      $(uberResponseCardContent).append(dropdown);
+      $(uberResponseCardBody).append(uberResponseCardContent);
+      $(".uber-response").append(uberResponseCardContainer);
 
     })
     .catch(function (response) {
@@ -232,6 +249,9 @@ $('#reset-search').on("click", function () {
 // ! listen for user input of zip code
 $('#submit-search').on("click", function (event) {
   event.preventDefault();
+  $('.bar-sub').empty();
+  $('.uber-info').empty();
+  $('.uber-response').empty();
   var zipCode = $('#zip-input').val();
   var search = $('#search-limit').val();
   reset();
@@ -364,18 +384,32 @@ $(document).on("click", ".bar-code", function () {
         if (!data.price) {
           data.price = "It's a mystery!";
         }
+
+        $('.bar-sub').empty();
+        $('.uber-info').empty();
+        $('.uber-response').empty();
+
         //    var ident = data.id;
         // BarData
         var name = $('<h4>').html('Name: ' + data.name);
         var price = $('<p>').html('Price: ' + data.price);
         var rating = $('<p>').html('Rating: ' + data.rating);
         var reviewCount = $('<p>').html('Reviews Total: ' + data.review_count);
-        var reviewHolder = $('<div id="reviews">');
+        var reviewCardContainer = $('<div class="card" id="yelp-card" style="width: 24rem;">');
         var addr = $('<p>').html('Address: ' + data.location.display_address);
         var phone = $('<p>').html('Phone: ' + data.display_phone);
 
         // ! This section is for the Buzzer Reviews ... Going to copy it for Dynamic Uber Card
         var buzzReviewTitle = $("<h4>").text("Buzzer Reviews");
+
+        // Buzzer Review Card //
+        var buzzReviewCardContainer = $('<div class="card" id="buzzer-card" style="width: 24rem;">');
+        var buzzReviewCardBody = $('<div class="card-body buzz-review-body">');
+        var buzzReviewCardTitle = $('<h5 class="card-title">').html("Buzzer Reviews");
+               
+        $(buzzReviewCardBody).append(buzzReviewCardTitle);
+        $(buzzReviewCardContainer).append(buzzReviewCardBody);
+
 
         /////   Comment Form   /////
         var commentCard = $('<div class="card">');
@@ -404,7 +438,7 @@ $(document).on("click", ".bar-code", function () {
         var userAddress = $('<input type="text" class="form-control" id="user-address" placeholder="123 Main Street, Dallas, TX">');
 
         var uberSubmit = $('<button type="submit" class="btn btn-primary btn-block mt-3" id="submit-uber" >').html("Submit");
-        uberSubmit.html('<h5>' + 'check for' + '<i class="fab fa-uber fa-lg"></i></h5>')
+        uberSubmit.html('<h5>' + 'check for ' + '<i class="fab fa-uber fa-lg"></i></h5>')
 
         // var uberCol2 = $('div class ="col-5"');
 
@@ -447,8 +481,8 @@ $(document).on("click", ".bar-code", function () {
         //      var cat = $('<p>').html('Want to Delete This - Category: ' + data.categories[0].title);
         //    }
         //   
-        $(barData).append(name, price, rating, reviewCount, addr, phone, reviewHolder); // , hours, cat
-        $(barData2).append(buzzReviewTitle);
+        $(barData).append(name, price, rating, reviewCount, addr, phone, reviewCardContainer); // , hours, cat
+        $(barData2).append(buzzReviewCardContainer);
 
         checkDB(businessID);
 
@@ -465,11 +499,18 @@ $(document).on("click", ".bar-code", function () {
             },
 
             success: function (data) {
-              var reviewTitle = $("<h4>").text("Reviews");
-              $(reviewHolder).append(reviewTitle);
+    //          var reviewTitle = $("<h4>").text("Reviews");
+    //          $(reviewHolder).append(reviewTitle);
+
+                var reviewCardBody = $('<div class="card-body yelp-review-body">');
+                var reviewCardTitle = $('<h5 class="card-title">').html("Reviews " + ('<i class="fab fa-yelp">'));  // check this
+                    
+                $(reviewCardBody).append(reviewCardTitle);
+                $(reviewCardContainer).append(reviewCardBody);
+
               for (let k = 0; k < data.reviews.length; k++) {
-                var reviews = $("<p>").html(data.reviews[k].text);
-                $(reviewHolder).append(reviews);
+                var reviewCardContent = $('<p class= "card-text">').html(data.reviews[k].text);
+                $(reviewCardBody).append(reviewCardContent);
               }
             }
           });
@@ -490,9 +531,12 @@ $(document).on("click", ".bar-code", function () {
             if (busID === n) {
               //  var existingComments = $('<div class="existing-comment">').text(comments);
               //  var existingUserName = $('<div class="existing-user-name">').text(userName);
-              var nameandComment = $('<div class="existing-name-comment">').text(userName + "- " + comments);
+            //  var nameandComment = $('<div class="existing-name-comment">').text(userName + "- " + comments);
 
-              $(barData2).append(nameandComment);
+              var buzzReviewCardContent = $('<p class="existing-name-comment">').text(userName + "- " + comments);
+              $(buzzReviewCardBody).append(buzzReviewCardContent);
+
+          //    $(barData2).append(nameandComment);
               found = true;
 
               console.log(comments);
