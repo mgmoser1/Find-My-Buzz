@@ -2,7 +2,6 @@
 
 var ourIcon = "https://img.icons8.com/android/24/000000/beer-bottle.png";
 
-
 // Initialize Firebase
 var config = {
   apiKey: "AIzaSyChY5mXqIZ_vL2diYGm77VslwzNU5xwSrk",
@@ -14,13 +13,14 @@ var config = {
 };
 firebase.initializeApp(config);
 
-
 // GLOBAL VARIABLES //
 
 // this is the variable to use when pushing to / pulling from firebase
 var barDB = firebase.database().ref();
 
-var uberResponseCardContainer = $('<div class="card uber-response-card" style="width: 24rem; margin-bottom: 30px;"">');
+var uberResponseCardContainer = $(
+  '<div class="card uber-response-card" style="width: 24rem; margin-bottom: 30px;"">'
+);
 var uberResponseCardBody = $('<div class="card-body uber-response-body">');
 
 // ! This function gets the user's Lat and Long via the Google Geocode API using an Axios Call
@@ -34,39 +34,42 @@ function getLatLng(userAddress) {
         key: "AIzaSyA2Z73bHqtsEJuas82kslWAoAegg5Rxrco"
       }
     })
-    .then(function (response) {
+    .then(function(response) {
       var formattedAddress = response.data.results[0].formatted_address;
       var newUserLat = response.data.results[0].geometry.location.lat;
       var newUserLng = response.data.results[0].geometry.location.lng;
+      // todo add this
+      $(uberResponseCardBody).empty();
 
-      var uberResponseCardTitle = $('<h5 class="card-title uber-card-title">').html("From: " + formattedAddress);
+      var uberResponseCardTitle = $(
+        '<h5 class="card-title uber-card-title">'
+      ).html("From: " + formattedAddress);
       $(uberResponseCardBody).append(uberResponseCardTitle);
       $(uberResponseCardContainer).append(uberResponseCardBody);
       $(".uber-response").append(uberResponseCardContainer);
 
       userLat = newUserLat;
       userLng = newUserLng;
-      if (formattedAddress.includes('TX')) {
-
+      if (formattedAddress.includes("TX")) {
         callUber();
       } else {
-        var title = 'ERROR: out of area';
-        var content = 'Currently this function only works in and around Dallas';
+        var title = "ERROR: out of area";
+        var content = "Uber is only available in and around select cities";
         createModal(title, content);
         $(".uber-response").empty();
       }
     })
-    .catch(function (error) {
-      var title = 'ERROR: ID10T';
-      var content = 'We have an input error.  Try entering a different address!';
+    .catch(function(error) {
+      var title = "ERROR: ID10T";
+      var content =
+        "We have an input error.  Try entering a different address!";
       createModal(title, content);
       $(".uber-response").empty();
     });
 }
 //  ! Geocoding Uber Button listener
-$(document).on("click", "#submit-uber", function (event) {
+$(document).on("click", "#submit-uber", function(event) {
   event.preventDefault();
- 
   var newUserAddress = $("#user-address").val();
   userAddress = newUserAddress;
   getLatLng(userAddress);
@@ -94,12 +97,13 @@ function callUber() {
   barLng = sessionStorage.getItem("barLng");
 
   $.ajax({
-      url: uberURL,
-      type: "GET",
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader("Authorization", "Bearer " + uberAuth);
-      }
-    }).then(function (response) {
+    url: uberURL,
+    type: "GET",
+    beforeSend: function(xhr) {
+      xhr.setRequestHeader("Authorization", "Bearer " + uberAuth);
+    }
+  })
+    .then(function(response) {
       var totalDistance = $("<h5>").html(
         "Distance: " + response.prices[0].distance
       );
@@ -110,47 +114,53 @@ function callUber() {
       var carTypes = [];
 
       for (var i = 0; i < response.prices.length; i++) {
-        var typeCar = response.prices[i].display_name + " Fee: " + response.prices[i].estimate;
+        var typeCar =
+          response.prices[i].display_name +
+          " Fee: " +
+          response.prices[i].estimate;
         carTypes.push(typeCar);
       }
 
       var dropdown = $('<div class="dropdown">');
-      var dropdownButton = $('<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Uber Types</button>');
-      
-      var dropdownMenu = $('<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">');
+      var dropdownButton = $(
+        '<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Uber Types</button>'
+      );
+
+      var dropdownMenu = $(
+        '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">'
+      );
       var dropdownItem;
 
       for (var j = 0; j < carTypes.length; j++) {
-        dropdownItem = $('<a class="dropdown-item href="#">' + carTypes[j] + '</a>');
+        dropdownItem = $(
+          '<a class="dropdown-item href="#">' + carTypes[j] + "</a>"
+        );
         dropdownMenu.append(dropdownItem);
       }
       dropdown.append(dropdownButton);
       dropdown.append(dropdownMenu);
- 
 
       $(uberResponseCardContent).append(dropdown);
       $(uberResponseCardBody).append(uberResponseCardContent);
       $(".uber-response").append(uberResponseCardContainer);
-
     })
-    .catch(function (response) {
-      
-      $("#user-address").val('');
-      var title = 'ERROR: out of range';
+    .catch(function(response) {
+      $("#user-address").val("");
+      var title = "ERROR: out of range";
       var content = "Dude, where are you trying to go?  Try again!";
       createModal(title, content);
       $(".uber-response").empty();
-    })
+    });
 }
 
 // ? This is for the GOOGLE Map API ??????
 function initMap() {
-  var map = new google.maps.Map(document.getElementById('map'), {
+  var map = new google.maps.Map(document.getElementById("map"), {
     zoom: 12,
-    center: new google.maps.LatLng(latArray[0], lngArray[0]),
+    center: new google.maps.LatLng(latArray[0], lngArray[0])
   });
 
-  var infoPopUp = new google.maps.InfoWindow;
+  var infoPopUp = new google.maps.InfoWindow();
   var marker, i;
 
   for (i = 0; i < searchLimit; i++) {
@@ -161,13 +171,16 @@ function initMap() {
       map: map
     });
 
-    google.maps.event.addListener(marker, 'click', (function (marker, i) {
-      return function () {
-        infoPopUp.setContent(nameArray[i]);
-        infoPopUp.open(map, marker);
-      }
-
-    })(marker, i));
+    google.maps.event.addListener(
+      marker,
+      "click",
+      (function(marker, i) {
+        return function() {
+          infoPopUp.setContent(nameArray[i]);
+          infoPopUp.open(map, marker);
+        };
+      })(marker, i)
+    );
   }
 }
 
@@ -185,8 +198,8 @@ var businessName = "";
 var nameArray = [];
 var latArray = [];
 var lngArray = [];
-var zip = '';
-var search = '';
+var zip = "";
+var search = "";
 
 // ? will need this for local storage
 var idArray = [];
@@ -212,37 +225,35 @@ function zipValidation() {
 
 // ! This resets the prior search
 function reset() {
-  $('#zip-input').val('');
-  $('#map').css("visibility", "hidden");
-  $('.barDiv').empty();
+  $("#zip-input").val("");
+  $("#map").css("visibility", "hidden");
+  $(".barDiv").empty();
   $(".bar-sub").empty();
   $(".uber-response").empty();
   $(".uber-info").empty();
-  $('#reset-search').css("visibility", "hidden");
+  $("#reset-search").css("visibility", "hidden");
 
   nameArray = [];
   latArray = [];
   lngArray = [];
-
 }
 
 // ! on click function for reset
-$('#reset-search').on("click", function () {
+$("#reset-search").on("click", function() {
   reset();
-})
+});
 
 // ! listen for user input of zip code
-$('#submit-search').on("click", function (event) {
+$("#submit-search").on("click", function(event) {
   event.preventDefault();
-  $('.bar-sub').empty();
-  $('.uber-info').empty();
-  $('.uber-response').empty();
-  var zipCode = $('#zip-input').val();
-  var search = $('#search-limit').val();
+  $(".bar-sub").empty();
+  $(".uber-info").empty();
+  $(".uber-response").empty();
+  var zipCode = $("#zip-input").val();
+  var search = $("#search-limit").val();
   reset();
-  $('#map').css("visibility", "visible");
-  $('#reset-search').css("visibility", "visible");
-
+  $("#map").css("visibility", "visible");
+  $("#reset-search").css("visibility", "visible");
 
   userloc = zipCode;
 
@@ -263,28 +274,25 @@ $('#submit-search').on("click", function (event) {
     $.ajax({
       url: buzzURL,
       type: "GET",
-      beforeSend: function (xhr) {
+      beforeSend: function(xhr) {
         xhr.setRequestHeader("Authorization", "Bearer " + key);
         xhr.setRequestHeader("X-Requested-With", "true");
       },
-      success: function (data) {
+      success: function(data) {
         if (data.businesses.length !== 0) {
           businessID = data.businesses[0].id;
           businessName = data.businesses[1].name;
 
           // ! This function will create buttons (Repeating element) for each bar on the 1st page
           function barButton() {
-
             for (var i = 0; i < searchLimit; i++) {
               var barBtn = $("<button>");
               barBtn.addClass("btn btn-light btn-lg bar-btn bar-code");
               barBtn.html(
-                data.businesses[i].name +
-                "<br>" + [data.businesses[i].price]
+                data.businesses[i].name + "<br>" + [data.businesses[i].price]
               );
               barBtn.attr("data-point", [data.businesses[i].id]);
               barBtn.appendTo(".barDiv");
-
 
               // !  Push the Bar Name, latitude, and longitude to array for the google map API
               var namePush = nameArray.push(data.businesses[i].name);
@@ -300,7 +308,7 @@ $('#submit-search').on("click", function (event) {
               var addAll = [data.businesses[i].id];
               idArray.push(addAll);
               idArray = idArray;
-           
+
               initMap();
             }
           }
@@ -314,12 +322,10 @@ $('#submit-search').on("click", function (event) {
 
 // Modal Creation Function
 function createModal(t, b) {
-
   var modalTitle = $("#modal-title");
   var modalBody = $("#modal-text");
 
-  if (t, b) {
-
+  if ((t, b)) {
     $(modalTitle).text(t);
     $(modalBody).text(b);
     $("#my-modal").modal("toggle");
@@ -327,104 +333,119 @@ function createModal(t, b) {
 }
 
 // BAR BUTTON ON-CLICK //
-$(document).on("click", ".bar-code", function () {
+$(document).on("click", ".bar-code", function() {
   event.preventDefault();
 
   var businessID = $(this).attr("data-point");
- 
+
   // Path for the second search by Bar ID. //
   var buzzDetailURL =
-    'https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/' + businessID;
+    "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/" +
+    businessID;
 
-  
   // Path for the third search by Bar ID for reviews. //
   var buzzReviewURL =
-    'https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/' + businessID + '/reviews';
-
-
+    "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/" +
+    businessID +
+    "/reviews";
 
   // ajax for the second Yelp API call - for bar's details.
   function getDataByID() {
     $.ajax({
       url: buzzDetailURL,
-      type: 'GET',
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader('Authorization', 'Bearer ' + key);
-        xhr.setRequestHeader('X-Requested-With', 'true');
+      type: "GET",
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader("Authorization", "Bearer " + key);
+        xhr.setRequestHeader("X-Requested-With", "true");
       },
-      success: function (data) {
-
+      success: function(data) {
         if (!data.price) {
           data.price = "It's a mystery!";
         }
 
-        $('.bar-sub').empty();
-        $('.uber-info').empty();
-        $('.uber-response').empty();
+        $(".bar-sub").empty();
+        $(".uber-info").empty();
+        $(".uber-response").empty();
 
         // BarData
-        var name = $('<h4>').html('Name: ' + data.name);
-        var price = $('<p>').html('Price: ' + data.price);
-        var rating = $('<p>').html('Rating: ' + data.rating);
-        var reviewCount = $('<p>').html('Reviews Total: ' + data.review_count);
-        var reviewCardContainer = $('<div class="card" id="yelp-card" style="width: 48rem; margin-top: 30px; margin-bottom: 30px;">');
-        var addr = $('<p>').html('Address: ' + data.location.display_address);
-        var phone = $('<p>').html('Phone: ' + data.display_phone);
+        var name = $("<h4>").html("Name: " + data.name);
+        var price = $("<p>").html("Price: " + data.price);
+        var rating = $("<p>").html("Rating: " + data.rating);
+        var reviewCount = $("<p>").html("Reviews Total: " + data.review_count);
+        var reviewCardContainer = $(
+          '<div class="card" id="yelp-card" style="width: 48rem; margin-top: 30px; margin-bottom: 30px;">'
+        );
+        var addr = $("<p>").html("Address: " + data.location.display_address);
+        var phone = $("<p>").html("Phone: " + data.display_phone);
 
         // ! This section is for the Buzzer Reviews ... Going to copy it for Dynamic Uber Card
         var buzzReviewTitle = $("<h4>").text("Buzzer Reviews");
 
         // Buzzer Review Card //
-        var buzzReviewCardContainer = $('<div class="card float-left" id="buzzer-card" style="width: 24rem; margin-bottom: 30px;">');
+        var buzzReviewCardContainer = $(
+          '<div class="card float-left" id="buzzer-card" style="width: 24rem; margin-bottom: 30px;">'
+        );
         var buzzReviewCardBody = $('<div class="card-body buzz-review-body">');
-        var buzzReviewCardTitle = $('<h5 class="card-title">').html("Buzzer Reviews");
-               
+        var buzzReviewCardTitle = $('<h5 class="card-title">').html(
+          "Buzzer Reviews"
+        );
+
         $(buzzReviewCardBody).append(buzzReviewCardTitle);
         $(buzzReviewCardContainer).append(buzzReviewCardBody);
-
 
         /////   Comment Form   /////
         var commentCard = $('<div class="card"style="margin-bottom: 30px;">');
         var cardBody = $('<div class="card-body">');
         var cardTitle = $('<h5 class="card-title">').text("Leave a comment!");
-        var commentForm = $('<form>');
+        var commentForm = $("<form>");
         var yourName = $('<div class="form-group">');
         var newNameLabel = $('<label for="userNameInput">').html("Your Name");
-        var newNameInput = $('<input type="text" class="form-control" id="name-input">');
+        var newNameInput = $(
+          '<input type="text" class="form-control" id="name-input">'
+        );
 
         var yourComment = $('<div class="form-group">');
-        var newCommentLabel = $('<label for="userCommentInput">').html("Comment");
-        var newCommentInput = $('<input type="text" class="form-control" id="comment-input" placeholder="Comment">');
+        var newCommentLabel = $('<label for="userCommentInput">').html(
+          "Comment"
+        );
+        var newCommentInput = $(
+          '<input type="text" class="form-control" id="comment-input" placeholder="Comment">'
+        );
 
-        var commentSubmit = $('<button type="submit" class="btn btn-success" id="comment-input-submit" data-toggle="modal" data-target="#commentInfoModal" data-point="businessID">').html("Submit");
-
+        var commentSubmit = $(
+          '<button type="submit" class="btn btn-success" id="comment-input-submit" data-toggle="modal" data-target="#commentInfoModal" data-point="businessID">'
+        ).html("Submit");
 
         // UBER Card //
-       
+
         var uberCard = $('<div class="card" style="margin-bottom: 30px;">');
         var uberCardBody = $('<div class="card-body">');
         var uberCardTitle = $('<h5 class="card-title">').text("Need a Lift?");
-        var uberForm = $('<form>');
+        var uberForm = $("<form>");
         var uberDiv = $('<div class="form-group text-center">');
         var addressLabel = $('<label for="user-address">').html("Address");
-        var userAddress = $('<input type="text" class="form-control" id="user-address" placeholder="123 Main Street, Dallas, TX">');
+        var userAddress = $(
+          '<input type="text" class="form-control" id="user-address" placeholder="123 Main Street, Dallas, TX">'
+        );
 
-        var uberSubmit = $('<button type="submit" class="btn btn-primary btn-block mt-3" id="submit-uber" >').html("Submit");
-        uberSubmit.html('<h5>' + 'check for ' + '<i class="fab fa-uber fa-lg"></i></h5>')
+        var uberSubmit = $(
+          '<button type="submit" class="btn btn-primary btn-block mt-3" id="submit-uber" >'
+        ).html("Submit");
+        uberSubmit.html(
+          "<h5>" + "check for " + '<i class="fab fa-uber fa-lg"></i></h5>'
+        );
 
-       
-        $('.bar-sub').empty();
+        $(".bar-sub").empty();
         $(yourName).append(newNameLabel, newNameInput);
         $(yourComment).append(newCommentLabel, newCommentInput);
         $(commentForm).append(yourName, yourComment, commentSubmit);
         $(cardBody).append(cardTitle, commentForm);
         $(commentCard).append(cardBody);
 
-       
         $(uberForm).append(uberDiv, addressLabel, userAddress, uberSubmit);
         $(uberCardBody).append(uberCardTitle, uberForm);
         $(uberCard).append(uberCardBody);
-      
+
         var barData = $('<div class="bar-info">');
         var barData2 = $('<div class="bar-info-2">');
         var barData3 = $('<div class="bar-info-3">');
@@ -441,36 +462,47 @@ $(document).on("click", ".bar-code", function () {
         }
 
         $(uberData).append(uberCard);
-        $('.uber-info').append(uberData);
+        $(".uber-info").append(uberData);
 
-        
-        $(barData).append(name, price, rating, reviewCount, addr, phone, reviewCardContainer); // , hours, cat
+        $(barData).append(
+          name,
+          price,
+          rating,
+          reviewCount,
+          addr,
+          phone,
+          reviewCardContainer
+        ); // , hours, cat
         $(barData2).append(buzzReviewCardContainer);
 
         checkDB(businessID);
 
         $(barData3).append(commentCard);
 
-
         function getreviewsByID() {
           $.ajax({
             url: buzzReviewURL,
             type: "GET",
-            beforeSend: function (xhr) {
+            beforeSend: function(xhr) {
               xhr.setRequestHeader("Authorization", "Bearer " + key);
               xhr.setRequestHeader("X-Requested-With", "true");
             },
 
-            success: function (data) {
-    
-                var reviewCardBody = $('<div class="card-body yelp-review-body">');
-                var reviewCardTitle = $('<h5 class="card-title">').html("Reviews " + ('<i class="fab fa-yelp">'));  // check this
-                    
-                $(reviewCardBody).append(reviewCardTitle);
-                $(reviewCardContainer).append(reviewCardBody);
+            success: function(data) {
+              var reviewCardBody = $(
+                '<div class="card-body yelp-review-body">'
+              );
+              var reviewCardTitle = $('<h5 class="card-title">').html(
+                "Reviews " + '<i class="fab fa-yelp">'
+              ); // check this
+
+              $(reviewCardBody).append(reviewCardTitle);
+              $(reviewCardContainer).append(reviewCardBody);
 
               for (let k = 0; k < data.reviews.length; k++) {
-                var reviewCardContent = $('<p class= "card-text">').html(data.reviews[k].text);
+                var reviewCardContent = $('<p class= "card-text">').html(
+                  data.reviews[k].text
+                );
                 $(reviewCardBody).append(reviewCardContent);
               }
             }
@@ -478,34 +510,35 @@ $(document).on("click", ".bar-code", function () {
         }
 
         function checkDB(n) {
-        
-          commentFound = barDB.on("child_added", function (snapshot) { // NOT childSnapshot
+          commentFound = barDB.on("child_added", function(snapshot) {
+            // NOT childSnapshot
             var found = false;
             let data = snapshot.val(); // NOT childSnapshot
-          
+
             let comments = data.comment;
             let userName = data.userName;
             let busID = data.busID;
-            
 
             if (busID === n) {
-            
-              var buzzReviewCardContent = $('<p class="existing-name-comment">').text(userName + "- " + comments);
+              var buzzReviewCardContent = $(
+                '<p class="existing-name-comment">'
+              ).text(userName + "- " + comments);
               $(buzzReviewCardBody).append(buzzReviewCardContent);
 
               found = true;
-
             }
             return found;
           });
 
-          if (commentFound = false) {
-            var noExisting = $('<h4 class="no-existing-comment">').text("Be the first Buzzer to review this spot!")
+          if ((commentFound = false)) {
+            var noExisting = $('<h4 class="no-existing-comment">').text(
+              "Be the first Buzzer to review this spot!"
+            );
             $(barData2).append(noExisting);
           }
         }
 
-        $('.bar-sub').append(photoDiv, barData, barData2, barData3);
+        $(".bar-sub").append(photoDiv, barData, barData2, barData3);
 
         getreviewsByID();
 
@@ -516,53 +549,47 @@ $(document).on("click", ".bar-code", function () {
         sessionStorage.setItem("barLat", barLat);
         sessionStorage.setItem("barLng", barLng);
         sessionStorage.setItem("barName", data.name);
-
       }
     });
   }
-
 
   getDataByID();
 
   // COMMENT SUBMIT ONCLICK //
 
-  $(document).on("click", "#comment-input-submit", function () {
+  $(document).on("click", "#comment-input-submit", function() {
     event.preventDefault();
     var newNameInput = "";
     var newCommentInput = "";
-    var newNameInput = $("#name-input").val().trim();
-    newCommentInput = $("#comment-input").val().trim();
+    var newNameInput = $("#name-input")
+      .val()
+      .trim();
+    newCommentInput = $("#comment-input")
+      .val()
+      .trim();
 
     if (!newNameInput) {
-
       var modTitle = "Name Required";
-      var modBody = "We've got to call you something!"
+      var modBody = "We've got to call you something!";
 
       createModal(modTitle, modBody);
     }
     if (!newCommentInput) {
-      ;
       var modTitle = "No Comment Provided";
-      var modBody = "Do not deprive us of your keen observations!"
+      var modBody = "Do not deprive us of your keen observations!";
 
       createModal(modTitle, modBody);
     }
     if (newNameInput && newCommentInput) {
-
       var newComment = {
-
         userName: newNameInput,
         comment: newCommentInput,
-        busID: businessID,
+        busID: businessID
       };
 
       barDB.push(newComment);
       $("#name-input").val("");
       $("#comment-input").val("");
     }
-
-
   }); // End of comment-input-submit click.
-
-
 }); // End of bar-code button click.
