@@ -1,4 +1,4 @@
-# Find Your Buzz
+# Find My Buzz
 
 The ability to find cheap drinks by providing your zipcode, the application will provide price, rating, bar type, and much more.  
 
